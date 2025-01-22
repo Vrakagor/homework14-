@@ -1,15 +1,20 @@
 def format_time(seconds):
-    if not (0 <= seconds < 8640000):
+    if not 0 <= seconds < 8640000:
         return "Некоректне значення! Введіть число від 0 до 8639999."
 
-    days, remainder = divmod(seconds, 86400)
-    hours, remainder = divmod(remainder, 3600)
-    minutes, sec = divmod(remainder, 60)
+    days, seconds = divmod(seconds, 86400)
+    hours, seconds = divmod(seconds, 3600)
+    minutes, sec = divmod(seconds, 60)
 
-    day_word = "день" if days % 10 == 1 and days % 100 != 11 else "дні" if 2 <= days % 10 <= 4 and not (
-                12 <= days % 100 <= 14) else "днів"
+    day_forms = {1: "день", 2: "дні", 3: "дні", 4: "дні"}
+    day_word = (
+        day_forms.get(days % 10, "днів")
+        if days % 100 not in (11, 12, 13, 14)
+        else "днів"
+    )
 
-    return f"{days} {day_word}, {str(hours).zfill(2)}:{str(minutes).zfill(2)}:{str(sec).zfill(2)}"
+    return f"{days} {day_word}, {hours:02}:{minutes:02}:{sec:02}"
+
 
 user_input = int(input("Введіть кількість секунд: "))
 print(format_time(user_input))
